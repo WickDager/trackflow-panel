@@ -1,27 +1,43 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import { useShipments } from '@/hooks/useShipments';
-import { getStatusColor, getStatusLabel, timeAgo } from '@/lib/utils';
-import type { ShipmentStatus } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useMemo } from "react";
+import { useShipments } from "@/hooks/useShipments";
+import { getStatusColor, getStatusLabel, timeAgo } from "@/lib/utils";
+import type { ShipmentStatus } from "@/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Package,
+  CheckCircle2,
+  Truck,
+  AlertTriangle,
+} from "lucide-react";
 
 interface StatCardProps {
   label: string;
   value: string | number;
   subtitle?: string;
+  icon: React.ElementType;
 }
 
-function StatCard({ label, value, subtitle }: StatCardProps) {
+function StatCard({ label, value, subtitle, icon: Icon }: StatCardProps) {
   return (
-    <Card className="border-bg-border bg-bg-surface">
+    <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-ink-secondary">{label}</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm font-medium text-ink-muted">
+            {label}
+          </CardTitle>
+          <Icon className="w-4 h-4 text-ink-muted opacity-60" />
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-ink-primary">{value}</div>
-        {subtitle && <p className="mt-1 text-xs text-ink-muted">{subtitle}</p>}
+        <div className="text-2xl font-bold text-ink-primary tracking-tight">
+          {value}
+        </div>
+        {subtitle && (
+          <p className="mt-1 text-xs text-ink-muted">{subtitle}</p>
+        )}
       </CardContent>
     </Card>
   );
@@ -61,21 +77,23 @@ interface TopRoute {
 
 function TopRoutesTable({ routes }: { routes: TopRoute[] }) {
   return (
-    <Card className="border-bg-border bg-bg-surface">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-lg">Top Routes</CardTitle>
+        <CardTitle>Top Routes</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {routes.map((route, i) => (
             <div key={i} className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-bg-elevated text-xs text-ink-muted">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-bg-elevated text-xs text-ink-muted font-medium">
                   {i + 1}
                 </span>
                 <span className="text-sm text-ink-primary">{route.route}</span>
               </div>
-              <span className="text-sm text-ink-secondary">{route.count} shipments</span>
+              <span className="text-sm text-ink-secondary">
+                {route.count} shipments
+              </span>
             </div>
           ))}
         </div>
@@ -85,14 +103,18 @@ function TopRoutesTable({ routes }: { routes: TopRoute[] }) {
 }
 
 export default function AnalyticsPage() {
-  const { shipments, loading, error } = useShipments({ status: 'all' });
+  const { shipments, loading, error } = useShipments({ status: "all" });
 
   const stats = useMemo(() => {
     const total = shipments.length;
-    const delivered = shipments.filter((s) => s.status === 'delivered').length;
-    const inTransit = shipments.filter((s) => s.status === 'in_transit').length;
-    const failed = shipments.filter((s) => s.status === 'failed').length;
-    const pending = shipments.filter((s) => s.status === 'pending').length;
+    const delivered = shipments.filter(
+      (s) => s.status === "delivered"
+    ).length;
+    const inTransit = shipments.filter(
+      (s) => s.status === "in_transit"
+    ).length;
+    const failed = shipments.filter((s) => s.status === "failed").length;
+    const pending = shipments.filter((s) => s.status === "pending").length;
 
     return {
       total,
@@ -100,7 +122,8 @@ export default function AnalyticsPage() {
       inTransit,
       failed,
       pending,
-      deliveredPercentage: total > 0 ? Math.round((delivered / total) * 100) : 0,
+      deliveredPercentage:
+        total > 0 ? Math.round((delivered / total) * 100) : 0,
       failedPercentage: total > 0 ? Math.round((failed / total) * 100) : 0,
     };
   }, [shipments]);
@@ -120,7 +143,10 @@ export default function AnalyticsPage() {
 
   const recentActivity = useMemo(() => {
     return [...shipments]
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
       .slice(0, 10);
   }, [shipments]);
 
@@ -129,7 +155,7 @@ export default function AnalyticsPage() {
       <div className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-24 w-full bg-bg-elevated" />
+            <Skeleton key={i} className="h-24 w-full" />
           ))}
         </div>
       </div>
@@ -138,7 +164,9 @@ export default function AnalyticsPage() {
 
   if (error) {
     return (
-      <div className="rounded-md bg-status-red-bg p-4 text-status-red">{error}</div>
+      <div className="rounded-lg bg-status-red-bg p-4 text-status-red border border-status-red/10">
+        {error}
+      </div>
     );
   }
 
@@ -146,36 +174,48 @@ export default function AnalyticsPage() {
     <div className="space-y-6">
       {/* Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total Shipments" value={stats.total} />
+        <StatCard
+          label="Total Shipments"
+          value={stats.total}
+          icon={Package}
+        />
         <StatCard
           label="Delivered"
           value={`${stats.deliveredPercentage}%`}
           subtitle={`${stats.delivered} of ${stats.total}`}
+          icon={CheckCircle2}
         />
-        <StatCard label="In Transit" value={stats.inTransit} />
+        <StatCard
+          label="In Transit"
+          value={stats.inTransit}
+          icon={Truck}
+        />
         <StatCard
           label="Failed"
           value={`${stats.failedPercentage}%`}
           subtitle={`${stats.failed} of ${stats.total}`}
+          icon={AlertTriangle}
         />
       </div>
 
       {/* Status Breakdown */}
-      <Card className="border-bg-border bg-bg-surface">
+      <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Status Breakdown</CardTitle>
+          <CardTitle>Status Breakdown</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {(['delivered', 'in_transit', 'pending', 'failed'] as ShipmentStatus[]).map((status) => (
+          {(
+            ["delivered", "in_transit", "pending", "failed"] as ShipmentStatus[]
+          ).map((status) => (
             <StatusBar
               key={status}
               status={status}
               count={
-                status === 'delivered'
+                status === "delivered"
                   ? stats.delivered
-                  : status === 'in_transit'
+                  : status === "in_transit"
                     ? stats.inTransit
-                    : status === 'pending'
+                    : status === "pending"
                       ? stats.pending
                       : stats.failed
               }
@@ -186,9 +226,9 @@ export default function AnalyticsPage() {
       </Card>
 
       {/* Recent Activity */}
-      <Card className="border-bg-border bg-bg-surface">
+      <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Recent Activity</CardTitle>
+          <CardTitle>Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -196,25 +236,36 @@ export default function AnalyticsPage() {
               recentActivity.map((shipment) => {
                 const colors = getStatusColor(shipment.status);
                 return (
-                  <div key={shipment.id} className="flex items-start gap-3">
-                    <div className={`mt-1.5 h-2.5 w-2.5 flex-shrink-0 rounded-full ${colors.dot}`} />
+                  <div
+                    key={shipment.id}
+                    className="flex items-start gap-3"
+                  >
+                    <div
+                      className={`mt-1.5 h-2.5 w-2.5 flex-shrink-0 rounded-full ${colors.dot}`}
+                    />
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm text-ink-primary">
+                        <span className="font-mono text-sm tracking-wide text-ink-primary">
                           {shipment.tracking_number}
                         </span>
-                        <span className={`text-xs ${colors.text}`}>{getStatusLabel(shipment.status)}</span>
+                        <span className={`text-xs ${colors.text}`}>
+                          {getStatusLabel(shipment.status)}
+                        </span>
                       </div>
                       <p className="text-xs text-ink-secondary">
                         {shipment.origin} → {shipment.destination}
                       </p>
                     </div>
-                    <span className="text-xs text-ink-muted">{timeAgo(shipment.created_at)}</span>
+                    <span className="text-xs text-ink-muted">
+                      {timeAgo(shipment.created_at)}
+                    </span>
                   </div>
                 );
               })
             ) : (
-              <p className="text-center text-sm text-ink-secondary">No recent activity</p>
+              <p className="text-center text-sm text-ink-secondary">
+                No recent activity
+              </p>
             )}
           </div>
         </CardContent>

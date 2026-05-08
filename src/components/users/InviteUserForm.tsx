@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { inviteUserSchema, type InviteUserInput } from '@/lib/validations';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { inviteUserSchema, type InviteUserInput } from "@/lib/validations";
 import {
   Dialog,
   DialogContent,
@@ -11,17 +11,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 interface InviteUserFormProps {
   open: boolean;
@@ -41,8 +41,8 @@ export function InviteUserForm({ open, onOpenChange }: InviteUserFormProps) {
   } = useForm<InviteUserInput>({
     resolver: zodResolver(inviteUserSchema),
     defaultValues: {
-      email: '',
-      role: 'user',
+      email: "",
+      role: "user",
     },
   });
 
@@ -57,37 +57,33 @@ export function InviteUserForm({ open, onOpenChange }: InviteUserFormProps) {
       reset();
       onOpenChange(false);
     }, 2000);
-    return true;
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-bg-surface border-bg-border sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <DialogHeader>
             <DialogTitle>Invite User</DialogTitle>
-            <DialogDescription className="text-ink-secondary">
+            <DialogDescription>
               Send an invitation to join the Trackflow panel.
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             {success && (
-              <div className="rounded-md bg-accent-subtle p-3 text-sm text-accent">
+              <div className="rounded-lg bg-accent-subtle p-3 text-sm text-accent border border-accent/10">
                 {success}
               </div>
             )}
 
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-                className="bg-bg-elevated border-bg-border text-ink-primary"
-              />
+              <Input id="email" type="email" {...register("email")} />
               {errors.email && (
-                <p className="text-sm text-status-red">{errors.email.message}</p>
+                <p className="text-sm text-status-red">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -95,9 +91,11 @@ export function InviteUserForm({ open, onOpenChange }: InviteUserFormProps) {
               <Label htmlFor="role">Role</Label>
               <Select
                 defaultValue="user"
-                onValueChange={(value) => setValue('role', value as 'admin' | 'user')}
+                onValueChange={(value) =>
+                  setValue("role", value as "admin" | "user")
+                }
               >
-                <SelectTrigger className="bg-bg-elevated border-bg-border text-ink-primary">
+                <SelectTrigger>
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -106,7 +104,9 @@ export function InviteUserForm({ open, onOpenChange }: InviteUserFormProps) {
                 </SelectContent>
               </Select>
               {errors.role && (
-                <p className="text-sm text-status-red">{errors.role.message}</p>
+                <p className="text-sm text-status-red">
+                  {errors.role.message}
+                </p>
               )}
             </div>
           </div>
@@ -121,7 +121,7 @@ export function InviteUserForm({ open, onOpenChange }: InviteUserFormProps) {
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || loading}>
-              {isSubmitting || loading ? 'Sending...' : 'Send Invitation'}
+              {isSubmitting || loading ? "Sending..." : "Send Invitation"}
             </Button>
           </DialogFooter>
         </form>

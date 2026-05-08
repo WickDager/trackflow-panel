@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { Camera } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { getInitials } from '@/lib/utils';
+import { useState, useRef } from "react";
+import { Camera } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { getInitials } from "@/lib/utils";
 
 interface AvatarUploadProps {
   currentAvatarUrl: string | null;
@@ -13,7 +13,12 @@ interface AvatarUploadProps {
   onAvatarChange: (base64: string) => void;
 }
 
-export function AvatarUpload({ currentAvatarUrl, fullName, email, onAvatarChange }: AvatarUploadProps) {
+export function AvatarUpload({
+  currentAvatarUrl,
+  fullName,
+  email,
+  onAvatarChange,
+}: AvatarUploadProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentAvatarUrl);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,10 +37,10 @@ export function AvatarUpload({ currentAvatarUrl, fullName, email, onAvatarChange
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <Avatar className="h-24 w-24 border-2 border-bg-border">
+      <Avatar className="h-24 w-24 border-2 border-bg-border/60">
         <AvatarImage src={previewUrl ?? undefined} />
         <AvatarFallback className="bg-bg-elevated text-xl text-ink-primary">
-          {getInitials(fullName ?? email)}
+          {getInitials(fullName || email)}
         </AvatarFallback>
       </Avatar>
       <div className="space-y-2">

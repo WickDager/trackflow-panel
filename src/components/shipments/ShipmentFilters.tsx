@@ -1,28 +1,33 @@
-'use client';
+"use client";
 
-import { Search, Plus } from 'lucide-react';
-import { useDebounce } from '@/hooks/useDebounce';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Search, Plus } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import type { ShipmentStatus } from '@/types';
-import { useEffect, useState } from 'react';
+} from "@/components/ui/select";
+import type { ShipmentStatus } from "@/types";
+import { useEffect, useState } from "react";
 
 interface ShipmentFiltersProps {
   onSearchChange: (value: string) => void;
-  onStatusChange: (value: ShipmentStatus | 'all') => void;
+  onStatusChange: (value: ShipmentStatus | "all") => void;
   onAdd: () => void;
   isAdmin: boolean;
 }
 
-export function ShipmentFilters({ onSearchChange, onStatusChange, onAdd, isAdmin }: ShipmentFiltersProps) {
-  const [searchInput, setSearchInput] = useState('');
+export function ShipmentFilters({
+  onSearchChange,
+  onStatusChange,
+  onAdd,
+  isAdmin,
+}: ShipmentFiltersProps) {
+  const [searchInput, setSearchInput] = useState("");
   const debouncedSearch = useDebounce(searchInput, 400);
 
   useEffect(() => {
@@ -45,7 +50,9 @@ export function ShipmentFilters({ onSearchChange, onStatusChange, onAdd, isAdmin
       {/* Status Filter */}
       <Select
         defaultValue="all"
-        onValueChange={(value) => onStatusChange(value as ShipmentStatus | 'all')}
+        onValueChange={(value) =>
+          onStatusChange(value as ShipmentStatus | "all")
+        }
       >
         <SelectTrigger className="w-full sm:w-[180px]">
           <SelectValue placeholder="All statuses" />

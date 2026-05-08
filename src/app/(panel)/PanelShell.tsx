@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import { usePathname } from 'next/navigation';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { Topbar } from '@/components/layout/Topbar';
-import { MobileNav } from '@/components/layout/MobileNav';
-import type { Role } from '@/types';
+import { useState, useMemo } from "react";
+import { usePathname } from "next/navigation";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { Topbar } from "@/components/layout/Topbar";
+import { MobileNav } from "@/components/layout/MobileNav";
+import type { Role } from "@/types";
 
 const pageTitleMap: Record<string, string> = {
-  '/app': 'Shipments',
-  '/account': 'Account',
-  '/admin/users': 'User Management',
-  '/admin/analytics': 'Analytics',
+  "/app": "Shipments",
+  "/account": "Account",
+  "/admin/users": "User Management",
+  "/admin/analytics": "Analytics",
 };
 
 interface PanelShellProps {
@@ -25,23 +25,28 @@ interface PanelShellProps {
   children: React.ReactNode;
 }
 
-export function PanelShell({ role, user, onSignOut, children }: PanelShellProps) {
+export function PanelShell({
+  role,
+  user,
+  onSignOut,
+  children,
+}: PanelShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const pathname = usePathname();
 
   const pageTitle = useMemo(() => {
-    return pageTitleMap[pathname] ?? 'Trackflow';
+    return pageTitleMap[pathname] ?? "Trackflow";
   }, [pathname]);
 
   return (
     <div className="flex h-screen bg-bg-base">
-      {/* Desktop Sidebar */}
-      <aside className="hidden w-52 flex-shrink-0 md:block">
+      {/* Desktop Sidebar — floating glass panel */}
+      <aside className="hidden w-56 flex-shrink-0 lg:block">
         <Sidebar role={role} user={user} onSignOut={onSignOut} />
       </aside>
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden lg:pt-3 lg:pr-3">
         <Topbar
           title={pageTitle}
           role={role}
@@ -49,7 +54,7 @@ export function PanelShell({ role, user, onSignOut, children }: PanelShellProps)
           onMenuClick={() => setMobileNavOpen(true)}
           onSignOut={onSignOut}
         />
-        <main className="flex-1 overflow-auto p-4 md:p-6">
+        <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
           {children}
         </main>
       </div>

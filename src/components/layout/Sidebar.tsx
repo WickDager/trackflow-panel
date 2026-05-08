@@ -1,21 +1,20 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Package, Users, BarChart3, Settings, LogOut, User } from 'lucide-react';
-import { cn, getInitials } from '@/lib/utils';
-import type { Role } from '@/types';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Package,
+  Users,
+  BarChart3,
+  Settings,
+  LogOut,
+  User,
+} from "lucide-react";
+import { cn, getInitials } from "@/lib/utils";
+import type { Role } from "@/types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface NavItem {
   label: string;
@@ -25,10 +24,15 @@ interface NavItem {
 }
 
 const allNavItems: NavItem[] = [
-  { label: 'Dashboard', href: '/app', icon: Package },
-  { label: 'Account', href: '/account', icon: User },
-  { label: 'Users', href: '/admin/users', icon: Users, adminOnly: true },
-  { label: 'Analytics', href: '/admin/analytics', icon: BarChart3, adminOnly: true },
+  { label: "Dashboard", href: "/app", icon: Package },
+  { label: "Account", href: "/account", icon: User },
+  { label: "Users", href: "/admin/users", icon: Users, adminOnly: true },
+  {
+    label: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
+    adminOnly: true,
+  },
 ];
 
 interface SidebarProps {
@@ -43,17 +47,33 @@ interface SidebarProps {
   onItemClick?: () => void;
 }
 
-export function Sidebar({ role, user, onSignOut, className, onItemClick }: SidebarProps) {
+export function Sidebar({
+  role,
+  user,
+  onSignOut,
+  className,
+  onItemClick,
+}: SidebarProps) {
   const pathname = usePathname();
-
-  const navItems = allNavItems.filter((item) => !item.adminOnly || role === 'admin');
+  const navItems = allNavItems.filter(
+    (item) => !item.adminOnly || role === "admin"
+  );
 
   return (
-    <div className={cn('flex h-full flex-col bg-bg-surface', className)}>
+    <div
+      className={cn(
+        "flex h-full flex-col bg-bg-surface",
+        // Floating glass on desktop
+        "lg:bg-bg-surface/80 lg:backdrop-blur-xl lg:border lg:border-bg-border/60 lg:my-3 lg:ml-3 lg:rounded-2xl lg:h-[calc(100vh-1.5rem)]",
+        className
+      )}
+    >
       {/* Logo */}
       <div className="flex h-14 items-center gap-2 px-4">
-        <div className="h-3 w-3 rounded-full bg-accent" />
-        <span className="text-lg font-semibold text-ink-primary">Trackflow</span>
+        <div className="h-2.5 w-2.5 rounded-full bg-accent" />
+        <span className="text-lg font-semibold tracking-tight text-ink-primary">
+          Trackflow
+        </span>
       </div>
 
       {/* Nav Items */}
@@ -67,10 +87,10 @@ export function Sidebar({ role, user, onSignOut, className, onItemClick }: Sideb
               href={item.href}
               onClick={onItemClick}
               className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? 'bg-accent-subtle text-accent'
-                  : 'text-ink-secondary hover:bg-bg-elevated hover:text-ink-primary'
+                  ? "bg-accent-subtle text-accent"
+                  : "text-ink-secondary hover:bg-bg-elevated hover:text-ink-primary"
               )}
             >
               <Icon className="h-4 w-4" />
@@ -81,7 +101,7 @@ export function Sidebar({ role, user, onSignOut, className, onItemClick }: Sideb
       </nav>
 
       {/* User Info */}
-      <div className="border-t border-bg-border p-4">
+      <div className="border-t border-bg-border/60 p-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user.avatarUrl ?? undefined} />
@@ -94,7 +114,7 @@ export function Sidebar({ role, user, onSignOut, className, onItemClick }: Sideb
               {user.name ?? user.email}
             </p>
             <Badge
-              variant={role === 'admin' ? 'default' : 'secondary'}
+              variant={role === "admin" ? "default" : "secondary"}
               className="mt-0.5 text-xs"
             >
               {role}

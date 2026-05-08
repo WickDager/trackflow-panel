@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { AvatarUpload } from '@/components/account/AvatarUpload';
-import { ProfileForm } from '@/components/account/ProfileForm';
-import { PasswordForm } from '@/components/account/PasswordForm';
-import type { Profile } from '@/types';
-import type { ProfileInput } from '@/lib/validations';
+import { useEffect, useState } from "react";
+import { AvatarUpload } from "@/components/account/AvatarUpload";
+import { ProfileForm } from "@/components/account/ProfileForm";
+import { PasswordForm } from "@/components/account/PasswordForm";
+import type { Profile } from "@/types";
+import type { ProfileInput } from "@/lib/validations";
 
 export default function AccountPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [avatarBase64, setAvatarBase64] = useState<string>('');
+  const [avatarBase64, setAvatarBase64] = useState<string>("");
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const res = await fetch('/api/account');
+        const res = await fetch("/api/account");
         if (!res.ok) {
-          throw new Error('Failed to fetch profile');
+          throw new Error("Failed to fetch profile");
         }
         const result = await res.json();
         if (result.error) {
@@ -27,7 +27,8 @@ export default function AccountPage() {
         }
         setProfile(result.data);
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'Failed to fetch profile';
+        const message =
+          err instanceof Error ? err.message : "Failed to fetch profile";
         setError(message);
       } finally {
         setLoading(false);
@@ -39,15 +40,15 @@ export default function AccountPage() {
 
   async function handleUpdateProfile(data: ProfileInput): Promise<boolean> {
     try {
-      const res = await fetch('/api/account', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/account", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       if (!res.ok) {
         const result = await res.json();
-        setError(result.error ?? 'Failed to update profile');
+        setError(result.error ?? "Failed to update profile");
         return false;
       }
 
@@ -55,7 +56,8 @@ export default function AccountPage() {
       setProfile(result.data);
       return true;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to update profile';
+      const message =
+        err instanceof Error ? err.message : "Failed to update profile";
       setError(message);
       return false;
     }
@@ -71,7 +73,7 @@ export default function AccountPage() {
 
   if (error) {
     return (
-      <div className="rounded-md bg-status-red-bg p-4 text-status-red">
+      <div className="rounded-lg bg-status-red-bg p-4 text-status-red border border-status-red/10">
         {error}
       </div>
     );
@@ -84,7 +86,7 @@ export default function AccountPage() {
         <div>
           <AvatarUpload
             currentAvatarUrl={profile?.avatar_url ?? null}
-            fullName={profile?.full_name ?? ''}
+            fullName={profile?.full_name ?? ""}
             email=""
             onAvatarChange={setAvatarBase64}
           />

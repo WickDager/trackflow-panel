@@ -1,37 +1,117 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 220 14% 8%;
-    --foreground: 220 14% 96%;
-    --card: 220 13% 9%;
-    --card-foreground: 220 14% 96%;
-    --popover: 220 13% 9%;
-    --popover-foreground: 220 14% 96%;
-    --primary: 142 76% 36%;
-    --primary-foreground: 220 14% 96%;
-    --secondary: 220 13% 12%;
-    --secondary-foreground: 220 14% 96%;
-    --muted: 220 14% 16%;
-    --muted-foreground: 220 14% 60%;
-    --accent: 142 76% 36%;
-    --accent-foreground: 220 14% 96%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 220 14% 96%;
-    --border: 220 13% 22%;
-    --input: 220 13% 22%;
-    --ring: 142 76% 36%;
-    --radius: 0.5rem;
-  }
+@theme inline {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --color-bg-base: #0B0A09;
+  --color-bg-surface: #141311;
+  --color-bg-elevated: #1C1A17;
+  --color-bg-overlay: #1F1D19;
+  --color-bg-border: #292724;
+  --color-bg-border-hover: #3D3A35;
+
+  --color-accent: #E8A840;
+  --color-accent-dim: #C4872E;
+  --color-accent-bright: #F5C25A;
+  --color-accent-muted: #3D2E1A;
+  --color-accent-subtle: #1F1810;
+
+  --color-ink-primary: #F2EFE9;
+  --color-ink-secondary: #A09B91;
+  --color-ink-muted: #5E5950;
+
+  --color-status-green: #4ADE80;
+  --color-status-green-bg: #0A2E15;
+  --color-status-blue: #38BDF8;
+  --color-status-blue-bg: #0C2035;
+  --color-status-amber: #FBBF24;
+  --color-status-amber-bg: #2D2010;
+  --color-status-red: #F87171;
+  --color-status-red-bg: #2D1515;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-bg-base text-ink-primary;
-  }
+:root {
+  --bg-base: #0B0A09;
+  --bg-surface: #141311;
+  --bg-elevated: #1C1A17;
+  --bg-overlay: #1F1D19;
+  --bg-border: #292724;
+  --bg-border-hover: #3D3A35;
+
+  --accent: #E8A840;
+  --accent-dim: #C4872E;
+  --accent-bright: #F5C25A;
+  --accent-muted: #3D2E1A;
+  --accent-subtle: #1F1810;
+
+  --text-primary: #F2EFE9;
+  --text-secondary: #A09B91;
+  --text-muted: #5E5950;
+
+  --status-green: #4ADE80;
+  --status-green-bg: #0A2E15;
+  --status-blue: #38BDF8;
+  --status-blue-bg: #0C2035;
+  --status-amber: #FBBF24;
+  --status-amber-bg: #2D2010;
+  --status-red: #F87171;
+  --status-red-bg: #2D1515;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
+
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-border-hover);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::selection {
+  background: var(--accent-muted);
+  color: var(--accent-bright);
 }

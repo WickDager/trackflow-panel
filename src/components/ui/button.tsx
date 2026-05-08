@@ -1,30 +1,35 @@
-import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base disabled:pointer-events-none disabled:opacity-40 active:scale-[0.98]",
   {
     variants: {
       variant: {
-        default: 'bg-accent text-accent-subtle shadow hover:bg-accent-dim',
-        destructive: 'bg-status-red text-white shadow-sm hover:bg-status-red/90',
-        outline: 'border border-bg-border bg-bg-surface shadow-sm hover:bg-bg-elevated hover:text-ink-primary',
-        secondary: 'bg-bg-elevated text-ink-primary shadow-sm hover:bg-bg-border',
-        ghost: 'hover:bg-bg-elevated hover:text-ink-primary',
-        link: 'text-accent underline-offset-4 hover:underline',
+        default:
+          "bg-accent text-[#1F1810] hover:bg-accent-dim shadow-sm shadow-accent/10",
+        destructive:
+          "bg-status-red-bg text-status-red border border-status-red/20 hover:bg-status-red-bg/80 hover:border-status-red/40",
+        outline:
+          "border border-bg-border-hover bg-transparent text-ink-secondary hover:bg-bg-surface hover:text-ink-primary hover:border-ink-muted",
+        secondary:
+          "bg-bg-elevated text-ink-secondary hover:bg-bg-overlay hover:text-ink-primary",
+        ghost:
+          "text-ink-secondary hover:bg-bg-surface hover:text-ink-primary",
+        link: "text-accent underline-offset-4 hover:underline",
       },
       size: {
-        default: 'h-9 px-4 py-2',
-        sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-10 rounded-md px-8',
-        icon: 'h-9 w-9',
+        default: "h-10 px-5 py-2",
+        sm: "h-9 rounded-md px-3.5 text-xs",
+        lg: "h-11 rounded-lg px-8 text-base",
+        icon: "h-10 w-10",
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: "default",
+      size: "default",
     },
   }
 );
@@ -37,7 +42,7 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
+    const Comp = asChild ? Slot : "button";
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
@@ -47,6 +52,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 export { Button, buttonVariants };

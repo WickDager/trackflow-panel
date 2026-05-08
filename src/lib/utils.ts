@@ -14,27 +14,31 @@ export function formatDate(date: string): string {
   });
 }
 
-export function getStatusColor(status: ShipmentStatus): { bg: string; text: string; dot: string } {
-  const colors: Record<ShipmentStatus, { bg: string; text: string; dot: string }> = {
+export function getStatusColor(status: ShipmentStatus): { bg: string; text: string; dot: string; border: string } {
+  const colors: Record<ShipmentStatus, { bg: string; text: string; dot: string; border: string }> = {
     delivered: {
-      bg: 'bg-status-green-bg',
-      text: 'text-status-green',
-      dot: 'bg-status-green',
+      bg: "bg-status-green-bg",
+      text: "text-status-green",
+      dot: "bg-status-green",
+      border: "border-status-green/10",
     },
     in_transit: {
-      bg: 'bg-status-blue-bg',
-      text: 'text-status-blue',
-      dot: 'bg-status-blue',
+      bg: "bg-status-blue-bg",
+      text: "text-status-blue",
+      dot: "bg-status-blue",
+      border: "border-status-blue/10",
     },
     pending: {
-      bg: 'bg-status-amber-bg',
-      text: 'text-status-amber',
-      dot: 'bg-status-amber',
+      bg: "bg-status-amber-bg",
+      text: "text-status-amber",
+      dot: "bg-status-amber",
+      border: "border-status-amber/10",
     },
     failed: {
-      bg: 'bg-status-red-bg',
-      text: 'text-status-red',
-      dot: 'bg-status-red',
+      bg: "bg-status-red-bg",
+      text: "text-status-red",
+      dot: "bg-status-red",
+      border: "border-status-red/10",
     },
   };
   return colors[status];

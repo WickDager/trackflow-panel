@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { X } from 'lucide-react';
-import { Sidebar } from './Sidebar';
-import type { Role } from '@/types';
-import { Button } from '@/components/ui/button';
+import { X } from "lucide-react";
+import { Sidebar } from "./Sidebar";
+import type { Role } from "@/types";
+import { Button } from "@/components/ui/button";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -17,14 +17,20 @@ interface MobileNavProps {
   onSignOut: () => void;
 }
 
-export function MobileNav({ isOpen, onClose, role, user, onSignOut }: MobileNavProps) {
+export function MobileNav({
+  isOpen,
+  onClose,
+  role,
+  user,
+  onSignOut,
+}: MobileNavProps) {
   if (!isOpen) return null;
 
   return (
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 z-40 bg-black/60"
+        className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -36,7 +42,7 @@ export function MobileNav({ isOpen, onClose, role, user, onSignOut }: MobileNavP
         aria-modal="true"
         aria-label="Mobile navigation"
       >
-        <div className="relative flex h-full flex-col">
+        <div className="relative flex h-full flex-col border-r border-bg-border/60 bg-bg-surface">
           {/* Close button */}
           <div className="absolute right-2 top-4 z-50">
             <Button
