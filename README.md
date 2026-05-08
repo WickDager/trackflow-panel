@@ -1,26 +1,30 @@
-# Trackflow Panel - B2B Admin Dashboard
+# Trackflow Panel — B2B Admin Dashboard
 
-A full-featured admin dashboard built with Next.js 14, TypeScript, Supabase, and shadcn/ui.
+A full-featured admin dashboard for shipment tracking and team management. Built with Next.js 16, TypeScript 6, Supabase, and shadcn/ui.
 
 ## Features
 
-- **Data Table** with sorting, filtering, search, and pagination (TanStack Table)
-- **Role-based UI** - admins see user management + analytics; users see only their own shipments
+- **Data Table** — sorting, filtering, search, and pagination (TanStack Table)
+- **Role-based UI** — admins see user management + analytics; users see only their own shipments
 - **Full CRUD** on shipments via Next.js API routes + Supabase
-- **Profile Management** - update name, company, avatar preview
-- **User Management** - invite users, change roles, remove users (admin only)
-- **Analytics Dashboard** - shipment stats, status breakdown, recent activity, top routes (admin only)
-- **All forms**: Zod validation, loading states, success/error feedback
+- **Profile Management** — update name, company, avatar preview
+- **User Management** — invite users, change roles, remove users (admin only)
+- **Analytics Dashboard** — shipment stats, status breakdown, recent activity, top routes (admin only)
+- **Form validation** — Zod schemas with React Hook Form, loading states, success/error feedback
 - **Mobile responsive** sidebar with drawer navigation
 
 ## Tech Stack
 
-- **Next.js 14** (App Router) · **TypeScript**
-- **Tailwind CSS** · **shadcn/ui**
-- **NextAuth v5** (JWT sessions)
-- **Supabase** (PostgreSQL + RLS)
-- **TanStack Table** (headless table logic)
-- **Zod** + **React Hook Form**
+| Category | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript 6 |
+| Styling | Tailwind CSS 4 + shadcn/ui |
+| Auth | NextAuth v5 (credentials + JWT) |
+| Database | Supabase (PostgreSQL + RLS) |
+| Table | TanStack Table v8 |
+| Forms | React Hook Form + Zod 4 |
+| Icons | Lucide React |
 
 ## Getting Started
 
@@ -61,53 +65,63 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ```
 src/
+├── auth.ts                         # NextAuth v5 config (credentials + JWT)
 ├── app/
-│   ├── (panel)/           # Authenticated dashboard
-│   │   ├── app/           # Shipments table (all roles)
-│   │   ├── account/       # Profile settings
-│   │   └── admin/         # Admin-only routes
-│   │       ├── users/     # User management
-│   │       └── analytics/ # Stats + metrics
-│   ├── api/               # API routes
-│   │   ├── shipments/     # CRUD for shipments
-│   │   ├── users/         # List users (admin)
-│   │   └── account/       # Profile update
-│   └── auth/login/        # Login page
+│   ├── globals.css                 # Tailwind v4 + dark theme tokens
+│   ├── layout.tsx                  # Root layout (DM Sans + JetBrains Mono)
+│   ├── page.tsx                    # Redirects to /app
+│   ├── (panel)/
+│   │   ├── layout.tsx              # Auth guard, passes session to PanelShell
+│   │   ├── PanelShell.tsx          # Client shell: Sidebar + Topbar + MobileNav
+│   │   ├── app/
+│   │   │   └── page.tsx            # Shipments table (all roles)
+│   │   ├── account/
+│   │   │   └── page.tsx            # Profile settings (all roles)
+│   │   └── admin/
+│   │       ├── layout.tsx          # Admin-only guard
+│   │       ├── users/
+│   │       │   └── page.tsx        # User management (admin)
+│   │       └── analytics/
+│   │           └── page.tsx        # Stats + metrics (admin)
+│   ├── api/
+│   │   ├── account/route.ts        # GET/PATCH profile
+│   │   ├── auth/[...nextauth]/     # NextAuth handler
+│   │   ├── shipments/
+│   │   │   ├── route.ts            # GET (list), POST (create)
+│   │   │   └── [id]/route.ts       # PATCH, DELETE
+│   │   └── users/route.ts          # GET all users (admin only)
+│   └── auth/login/
+│       └── page.tsx                # Credentials login form
 ├── components/
-│   ├── layout/            # Sidebar, Topbar, MobileNav
-│   ├── shipments/         # Table, filters, form, badge
-│   ├── users/             # Users table, invite form
-│   ├── account/           # Profile, avatar, password forms
-│   └── ui/                # shadcn/ui components
-├── hooks/                 # useShipments, useUsers, useDebounce
-├── lib/                   # Supabase client, Zod schemas, utils
-├── types/                 # TypeScript type definitions
-└── auth.ts                # NextAuth configuration
+│   ├── layout/                     # Sidebar, Topbar, MobileNav
+│   ├── shipments/                  # Table, Filters, Form, StatusBadge
+│   ├── users/                      # UsersTable, InviteUserForm
+│   ├── account/                    # ProfileForm, AvatarUpload, PasswordForm
+│   └── ui/                         # shadcn/ui primitives
+├── hooks/
+│   ├── useShipments.ts             # CRUD hook with optimistic delete
+│   ├── useUsers.ts                 # Users list with abort controller
+│   └── useDebounce.ts              # Generic debounce for search
+├── lib/
+│   ├── supabase.ts                 # Browser client + server client (service role)
+│   ├── validations.ts              # Zod schemas
+│   └── utils.ts                    # cn(), formatDate(), getStatusColor(), timeAgo(), getInitials()
+└── types/
+    ├── index.ts                    # Shipment, Profile, ApiResponse, SessionUser
+    └── database.ts                 # Supabase Database type
 ```
 
 ## Authentication
 
-The app uses NextAuth v5 with Supabase credentials provider. Set up test users in your Supabase project's Authentication section.
+The app uses NextAuth v5 with a Supabase credentials provider. Set up test users in your Supabase project's Authentication section.
 
 ### Security Layers
-1. **Middleware** - checks for valid session token on protected routes
-2. **Admin layout guard** - server-side role check redirects non-admins
-3. **API route checks** - every admin API route verifies role server-side
-4. **Supabase RLS** - row-level security enforces data access at the database level
+1. **Middleware** — checks for valid session token on protected routes
+2. **Panel layout** — server-side session check, redirects unauthenticated users
+3. **Admin layout guard** — server-side role check redirects non-admins
+4. **API route checks** — every admin API route verifies role server-side
+5. **Supabase RLS** — row-level security enforces data access at the database level
 
-## What I fixed manually after generation
+## License
 
-- TanStack Table column helper types needed explicit generic parameters
-- Supabase typed client `.update()`/`.insert()` strict mode required `as any` cast on the client
-- Zod schemas with `.default()` caused RHF type mismatches - removed defaults, set in `defaultValues`
-- `toggleSorting()` expected `boolean | undefined` but `getIsSorted()` returns `false | 'asc' | 'desc'` - wrapped with `!!`
-- Supabase client generic typing required explicit `<Database>` on all client instances
-
-## Deploy
-
-```bash
-npm run build
-vercel deploy
-```
-
-Add your environment variables in the Vercel dashboard.
+MIT © 2026 Amos Masarira
